@@ -4,7 +4,7 @@ from langchain_core.retrievers import BaseRetriever
 from src.vectordb.vector_store import get_vector_store
 
 @lru_cache(maxsize=1)
-def get_retriever() -> BaseRetriever:
+def base_retriever() -> BaseRetriever:
     settings = get_settings()
     vector_store = get_vector_store()
     return vector_store.as_retriever(

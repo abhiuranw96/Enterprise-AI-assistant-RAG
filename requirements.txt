@@ -1,5 +1,7 @@
 langchain
 langgraph
+langgraph-sqlite
+langgraph-checkpoint-sqlite
 langchain-core
 langchain-community
 langchain-text-splitters
@@ -10,3 +12,5 @@ python-dotenv
 langchain-pinecone
 pandas 
 fastapi
+streamlit
+requests

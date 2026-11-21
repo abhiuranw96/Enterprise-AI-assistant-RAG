@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     pinecone_api_key: str = ""
     pinecone_index_name: str = "agentic-rag"
     pinecone_namespace: str = "IT-industry-agentic-rag"
+    groq_api_key: str = ""
+    tavily_api_key: str = ""
 
     embedding_dimensions: int = 384
     

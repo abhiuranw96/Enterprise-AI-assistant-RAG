@@ -2,6 +2,7 @@ from pinecone import Pinecone, ServerlessSpec
 from langchain_pinecone import PineconeVectorStore
 from src.core import config
 from src.embeddings import embedding
+from src.chunking import chunker
 import time
 
 settings = config.get_settings()
@@ -44,7 +45,8 @@ def get_vectorstore():
     global _vectorstore
     if _vectorstore is None:
         index = ensure_index()
-        _vectorstore = PineconeVectorStore(
+        _vectorstore = PineconeVectorStore.from_documents(
+            documents = chunker.chunk_documents(),  # Pass an empty list or your actual documents here
             index=index,
             embedding=embedding.embeddings(),
             namespace=settings.pinecone_namespace,

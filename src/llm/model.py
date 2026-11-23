@@ -9,7 +9,7 @@ settings = config.get_settings()
 _llm=None
 _web_search = None
 
-def llm() -> ChatGroq:
+def get_llm() -> ChatGroq:
     global _llm
     if _llm is None:
         if not settings.groq_api_key:
@@ -21,7 +21,7 @@ def llm() -> ChatGroq:
         )
     return _llm
 
-def web_search_tool():
+def get_web_search_tool():
     global _web_search
     if _web_search is None:
         if not settings.tavily_api_key:
@@ -34,4 +34,8 @@ def web_search_tool():
             include_raw_content=False,
         )
     return _web_search
+
+
+llm = get_llm()
+web_search_tool = get_web_search_tool()
     

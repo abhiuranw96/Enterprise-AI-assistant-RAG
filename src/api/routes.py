@@ -1,7 +1,6 @@
 from pathlib import Path
 from fastapi import APIRouter, File, Header, UploadFile
 from fastapi.exceptions import HTTPException
-from traitlets import default
 from src.core.config import get_settings
 from pydantic import BaseModel, Field
 from src.utils.helper import ask_agent
@@ -47,11 +46,20 @@ async def ingest_documents(file: UploadFile = File(...), secret_key: str = Heade
     dest = upload_dir / Path(file.filename).name
     dest.write_bytes(await file.read())
     
-    docs = load_file(dest)
-    chunks = chunker.chunk_documents(docs)
-    
-    # add chunks to vector store
-    ids = add_documents(chunks)
+    try:
+        docs = load_file(dest)
+        if not docs:
+            raise HTTPException(status_code=400, detail="The document contained no readable text.")
+
+        chunks = chunker.chunk_documents(docs)
+        if not chunks:
+            raise HTTPException(status_code=400, detail="The document produced no searchable text chunks.")
+
+        ids = add_documents(chunks)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Document ingestion failed: {exc}") from exc
     
     return {"message": f"Successfully ingested {dest.name} with {len(chunks)} chunks.", "ids": len(ids)}
     

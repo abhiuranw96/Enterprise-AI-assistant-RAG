@@ -3,42 +3,28 @@ from langgraph.graph import END, START, StateGraph
 from src.state.state import AgentState, QueryRouter, GradeEvidence
 from src.generation.generate import generate_from_kb, generate_from_web, direct_ans, insufficient_ans
 from src.llm.model import llm, web_search_tool
-from src.retrieval import retrieve
+from src.retrieval.retrieve import get_retriever
 
 # Node 1: Route -> KB or Direct
 router_llm = llm.with_structured_output(QueryRouter, method="json_mode")
 
 def decision_router(query: AgentState):
     question = query["question"]
-    
-    decision = router_llm.invoke(f'''
-    You are a router for an Agentic RAG system. You will be given a question and you need to decide whether to use the knowledge base (KB) for answer or direct from web search.
-    Route to "kb" if the user ask the question about:
-    - agentic rag
-    - agentic rag architecture
-    - agentic rag components
-    - agentic rag workflow
-    - retrieval grading
-    - rewriting the answer based on retrieved documents
-    - retriever tools
-    - web fallback in rag
-    
-    Route to "direct" only for the greeting or general questions.
-    
-    Question: {query["question"]}
-    
-    Return answer as a valid JSON object with the following format:
-    {{
-        "route": "kb" or "direct"
-    }}
-    
-    ''')
-    
-    print("[Route]: ", decision.route)
-    
+    normalized = question.strip().lower()
+    greeting_words = {
+        "hi", "hello", "hey", "good morning", "good afternoon",
+        "good evening", "thanks", "thank you", "how are you",
+        "how are you doing", "what can you do",
+    }
+    if normalized in greeting_words:
+        return {
+            "current_query": question,
+            "source": "direct",
+        }
+
     return {
         "current_query": question,
-        "source": decision.route
+        "source": "kb",
     }
     
 
@@ -53,8 +39,8 @@ def route_after_router(state: AgentState) -> Literal["retrieve_kb", "direct_ans"
 
 def retrieve_kb(state: AgentState) -> AgentState:
     query = state["current_query"]
-    
-    docs = retrieve(query)
+
+    docs = get_retriever().invoke(query)
     
     print("[Retrieved query]: ", query)
     print("[Retrieved docs]: ", len(docs))
@@ -223,8 +209,8 @@ def build_graph():
     "decision_router", 
     route_after_router, 
     {
-        "kb": "retrieve_kb",
-        "direct": "direct_ans"
+        "retrieve_kb": "retrieve_kb",
+        "direct_ans": "direct_ans"
     }
 )
     workflow.add_edge("retrieve_kb", "grade_kb")
@@ -232,8 +218,8 @@ def build_graph():
     "grade_kb", 
     route_after_kb_grading, 
     {
-        "good": "generate_from_kb",
-        "weak": "web_search"
+        "generate_from_kb": "generate_from_kb",
+        "web_search": "web_search"
     }
 )
 
@@ -242,9 +228,9 @@ def build_graph():
     "grade_web", 
     route_after_web_grading, 
     {
-        "good": "generate_from_web",
-        "weak": "rewrite_query",
-        "insufficient": "insufficient_ans"
+        "generate_from_web": "generate_from_web",
+        "rewrite_query": "rewrite_query",
+        "insufficient_ans": "insufficient_ans"
     }
 )
 

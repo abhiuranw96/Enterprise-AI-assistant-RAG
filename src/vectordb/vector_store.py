@@ -45,10 +45,13 @@ def get_vectorstore():
     global _vectorstore
     if _vectorstore is None:
         index = ensure_index()
-        _vectorstore = PineconeVectorStore.from_documents(
-            documents = chunker.chunk_documents(),  # Pass an empty list or your actual documents here
+        _vectorstore = PineconeVectorStore(
             index=index,
             embedding=embedding.embeddings(),
             namespace=settings.pinecone_namespace,
         )
     return _vectorstore
+
+def add_documents(chunks):
+    store = get_vectorstore()
+    return store.add_documents(chunks)

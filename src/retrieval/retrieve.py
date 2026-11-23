@@ -1,4 +1,4 @@
-from vectordb.vector_store import get_vectorstore
+from src.vectordb.vector_store import get_vectorstore
 from src.core import config
 settings = config.get_settings()
 

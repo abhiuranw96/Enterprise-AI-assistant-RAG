@@ -14,3 +14,4 @@ pandas
 fastapi
 streamlit
 requests
+python-docx

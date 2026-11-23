@@ -1,5 +1,5 @@
 from pathlib import Path
-from langchain_core.document_loaders import PyPDFLoader, TextLoader
+from langchain_community.document_loaders import PyPDFLoader, TextLoader
 from langchain_core.documents import Document
 from docx import Document as DocxDocument
 
@@ -12,10 +12,10 @@ def load_file(file_path: Path) -> list[Document]:
     suffix = file_path.suffix.lower()
     
     if suffix == ".pdf":
-        return PyPDFLoader(str(file_path), encoding="utf-8").load()
+        return PyPDFLoader(str(file_path)).load()
     
-    if suffix in {"*.txt", "*.md"}:
-        return TextLoader(str(file_path)).load()
+    if suffix in {".txt", ".md"}:
+        return TextLoader(str(file_path), encoding="utf-8").load()
     
     if suffix == ".docx":
         doc =  DocxDocument(str(file_path))

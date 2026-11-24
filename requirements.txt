@@ -1,7 +1,5 @@
 langchain
 langgraph
-langgraph-sqlite
-langgraph-checkpoint-sqlite
 langchain-core
 langchain-community
 langchain-text-splitters
@@ -12,6 +10,12 @@ python-dotenv
 langchain-pinecone
 pandas 
 fastapi
+uvicorn[standard]
 streamlit
 requests
 python-docx
+pydantic-settings
+python-multipart
+langchain-groq
+langchain-tavily
+pinecone

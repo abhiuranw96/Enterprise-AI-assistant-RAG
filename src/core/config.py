@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     chat_model: str = ""
     
     # embedding model
+    hf_token: str = ""
     embedding_model: str = ""
     
     # Embeddings and vector database

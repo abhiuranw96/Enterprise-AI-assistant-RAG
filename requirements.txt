@@ -1,5 +1,6 @@
 langchain
 langgraph
+huggingface-hub
 langchain-core
 langchain-community
 langchain-text-splitters
@@ -19,4 +20,3 @@ python-multipart
 langchain-groq
 langchain-tavily
 pinecone
-sentence-transformers

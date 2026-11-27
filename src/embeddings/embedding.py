@@ -1,17 +1,16 @@
-from langchain_huggingface import HuggingFaceEndpointEmbeddings
+from langchain_google_genai import GoogleGenerativeAIEmbeddings
 from src.core import config
 
 settings = config.get_settings()
 
-def embeddings() -> HuggingFaceEndpointEmbeddings:
+def embeddings() -> GoogleGenerativeAIEmbeddings:
     """
-    Create and return a HuggingFaceEndpointEmbeddings instance using the specified embedding model.
+    Create and return a GoogleGenerativeAIEmbeddings instance using the specified embedding model.
     
     Returns:
-        HuggingFaceEndpointEmbeddings: An instance of HuggingFaceEndpointEmbeddings initialized with the specified model.
+        GoogleGenerativeAIEmbeddings: An instance of GoogleGenerativeAIEmbeddings initialized with the specified model.
     """
-    return HuggingFaceEndpointEmbeddings(
+    return GoogleGenerativeAIEmbeddings(
         model=settings.embedding_model,
-        task = "feature-extraction",
-        huggingfacehub_api_token=settings.hf_token,
+        google_api_key=settings.google_api_key,
         )

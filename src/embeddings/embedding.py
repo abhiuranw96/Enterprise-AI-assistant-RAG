@@ -1,16 +1,17 @@
-from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEndpointEmbeddings
 from src.core import config
 
 settings = config.get_settings()
 
-def embeddings() -> HuggingFaceEmbeddings:
+def embeddings() -> HuggingFaceEndpointEmbeddings:
     """
-    Create and return a HuggingFaceEmbeddings instance using the specified embedding model.
+    Create and return a HuggingFaceEndpointEmbeddings instance using the specified embedding model.
     
     Returns:
-        HuggingFaceEmbeddings: An instance of HuggingFaceEmbeddings initialized with the specified model.
+        HuggingFaceEndpointEmbeddings: An instance of HuggingFaceEndpointEmbeddings initialized with the specified model.
     """
-    return HuggingFaceEmbeddings(
-        model_name=settings.embedding_model,
-        encode_kwargs={"normalize_embeddings": True},
+    return HuggingFaceEndpointEmbeddings(
+        model=settings.embedding_model,
+        task = "feature-extraction",
+        huggingfacehub_api_token=settings.hf_token,
         )

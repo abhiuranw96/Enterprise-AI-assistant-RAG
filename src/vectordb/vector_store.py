@@ -53,5 +53,22 @@ def get_vectorstore():
     return _vectorstore
 
 def add_documents(chunks):
-    store = get_vectorstore()
-    return store.add_documents(chunks)
+    all_ids = []
+    BATCH_SIZE = 20
+    vectorstore = get_vectorstore()
+    for i in range(0, len(chunks), BATCH_SIZE):
+        batch = chunks[i : i + BATCH_SIZE]
+        while True:
+            try:
+                batch_ids = vectorstore.add_documents(batch)
+                if batch_ids:
+                    all_ids.extend(batch_ids)
+                break
+            except Exception as e:
+                if "429" in str(e) or "RESOURCE_EXHAUSTED" in str(e):
+                    time.sleep(60)
+                else:
+                    raise
+        if i + BATCH_SIZE < len(chunks):
+            time.sleep(20)
+    return chunks, all_ids  # Match whatever tuple/value your function originally returned

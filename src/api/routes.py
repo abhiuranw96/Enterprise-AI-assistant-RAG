@@ -61,7 +61,7 @@ async def ingest_documents(file: UploadFile = File(...), secret_key: str = Heade
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Document ingestion failed: {exc}") from exc
     
-    return {"message": f"Successfully ingested {dest.name} with {len(chunks)} chunks.", "ids": len(ids)}
+    return {"message": f"Successfully ingested {dest.name} with {len(chunks)} chunks.", "ids": len(ids) if ids else len(chunks)}
     
     
 

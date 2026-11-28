@@ -9,9 +9,9 @@ class Settings(BaseSettings):
     app_name: str = "Enterprise AI knowledge System"
     app_env: str = "assistant_env"
     api_prefix: str = "/api/v1"
-    chunk_size: int = 1000
+    chunk_size: int = 1500
     chunk_overlap: int = 200
-    
+    batch_size: int = 20
     # chat model
     chat_model: str = ""
     

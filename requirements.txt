@@ -1,10 +1,9 @@
 langchain
 langgraph
-huggingface-hub
 langchain-core
 langchain-community
 langchain-text-splitters
-langchain-huggingface
+langchain-google-genai
 langchain-ollama
 pypdf
 python-dotenv

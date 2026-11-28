@@ -13,7 +13,7 @@ A private knowledge assistant for an organization. Upload company documents to a
 
 ## Requirements
 
-- Python 3.10 or later.
+- Python 3.12.10
 - API credentials for Groq, Tavily, and Pinecone.
 - A Pinecone index configured for the embedding model's dimension (384 by default).
 
@@ -39,9 +39,9 @@ Create a `.env` file in the project root and configure the application:
 GROQ_API_KEY=your_groq_api_key
 TAVILY_API_KEY=your_tavily_api_key
 PINECONE_API_KEY=your_pinecone_api_key
+GOOGLE_API_KEY = your_google_api_key (google ai studio for embedding model) 
 
-CHAT_MODEL=your_groq_model_name
-EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-v2
+CHAT_MODEL=your_groq_model_name 
 
 PINECONE_INDEX_NAME=agentic-rag
 PINECONE_NAMESPACE=IT-industry-agentic-rag

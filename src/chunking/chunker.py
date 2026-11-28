@@ -10,8 +10,8 @@ def chunk_documents(documents: Iterable[Document]) -> list[Document]:
         documents (Iterable[Document]): An iterable of Document objects to be chunked.
     """
     text_splitter = RecursiveCharacterTextSplitter(
-        chunk_size=900,  # You can adjust this value based on your requirements
-        chunk_overlap=150,  # You can adjust this value based on your requirements
+        chunk_size=1500,
+        chunk_overlap=200,  
         add_start_index=True,
     )
     
